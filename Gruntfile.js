@@ -13,7 +13,7 @@ module.exports = function(grunt) {
             js: '<%= path.app %>/js',
             less: '<%= path.app %>/less',
             html: '<%= path.app %>/*.html',
-            bowerComponents: 'bower_components'
+            bower: 'bower_components'
         },
 
         jshint: {
@@ -46,10 +46,10 @@ module.exports = function(grunt) {
             },
             vendor: {
                 src: [
-                    'bower_components/jquery/jquery.js',
-                    'bower_components/underscore/underscore.js',
-                    'bower_components/backbone/Backbone.js',
-                    'bower_components/bootstrap/dist/js/bootstrap.js'
+                    '<%= path.bower %>/jquery/jquery.js',
+                    '<%= path.bower %>/underscore/underscore.js',
+                    '<%= path.bower %>/backbone/Backbone.js',
+                    '<%= path.bower %>/bootstrap/dist/js/bootstrap.js'
                 ],
                 dest: 'public/js/vendor.js',
             },
@@ -62,8 +62,8 @@ module.exports = function(grunt) {
             },
             css: {
                 src: [
-                    'bower_components/bootstrap/dist/css/bootstrap.css',
-                    'bower_components/bootstrap/dist/css/bootstrap-theme.css'
+                    '<%= path.bower %>/bootstrap/dist/css/bootstrap.css',
+                    '<%= path.bower %>/bootstrap/dist/css/bootstrap-theme.css'
                 ],
                 dest: 'public/css/vendor.css',
             }
