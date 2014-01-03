@@ -40,6 +40,12 @@ module.exports = function(grunt) {
             js: ['<%= path.js %>/**/*.js']
         },
 
+        less: {
+            files: {
+                "public/css/app.css": '<%= path.less %>/app.less'
+            }
+        },
+
         concat: {
             options: {
                 separator: ';',
