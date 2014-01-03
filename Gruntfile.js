@@ -5,6 +5,9 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                '<%= grunt.template.today("yyyy-mm-dd") %>',
+
         path: {
             app: 'app',
             js: '<%= path.app %>/js',
@@ -12,9 +15,6 @@ module.exports = function(grunt) {
             html: '<%= path.app %>/*.html',
             bowerComponents: 'bower_components'
         },
-
-        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                '<%= grunt.template.today("yyyy-mm-dd") %>',
 
         jshint: {
             options: {
@@ -24,6 +24,7 @@ module.exports = function(grunt) {
                 undef: true,
                 browser: true,
                 globals: {
+                    app: true,
                     console: true,
                     _: true,
                     $: true,
@@ -36,8 +37,46 @@ module.exports = function(grunt) {
                 }
             },
             gruntfile: ['Gruntfile.js'],
-            app: ['<%= path.js %>/**/*.js']
+            js: ['<%= path.js %>/**/*.js']
         },
+
+        concat: {
+            options: {
+                separator: ';',
+            },
+            vendor: {
+                src: [
+                    'bower_components/jquery/jquery.js',
+                    'bower_components/underscore/underscore.js',
+                    'bower_components/backbone/Backbone.js',
+                    'bower_components/bootstrap/dist/js/bootstrap.js'
+                ],
+                dest: 'public/js/vendor.js',
+            },
+            js: {
+                src: [
+                    '<%= path.js %>/views/appView.js',
+                    '<%= path.js %>/appBootstrap.js'
+                ],
+                dest: 'public/js/app.js',
+            },
+            css: {
+                src: [
+                    'bower_components/bootstrap/dist/css/bootstrap.css',
+                    'bower_components/bootstrap/dist/css/bootstrap-theme.css'
+                ],
+                dest: 'public/css/vendor.css',
+            }
+        },
+
+        copy: {
+            html: {
+                src: '<%= path.app %>/index.html',
+                dest: 'public/index.html'
+            }
+        },
+
+        clean: ['public'],
 
         watch: {
             options: {
@@ -45,11 +84,11 @@ module.exports = function(grunt) {
             },
             gruntfile: {
                 files: ['<%= jshint.gruntfile %>'],
-                tasks: ['jshint:gruntfile', 'watch']
+                tasks: ['jshint:gruntfile']
             },
-            app: {
-                files: ['<%= jshint.app %>'],
-                tasks: ['jshint:app']
+            js: {
+                files: ['<%= jshint.js %>'],
+                tasks: ['jshint:js', 'concat:js']
             },
             html: {
                 files: ['public/index.html'],
@@ -58,5 +97,5 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default', ['watch']);
+    grunt.registerTask('default', ['clean', 'copy', 'concat', 'watch']);
 };
