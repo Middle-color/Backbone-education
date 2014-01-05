@@ -41,8 +41,16 @@ module.exports = function(grunt) {
         },
 
         less: {
-            files: {
+            /*files: {
                 "public/css/app.css": '<%= path.less %>/app.less'
+            }*/
+            development: {
+                options: {
+                    paths: ['<%= path.less %>/app.less']
+                },
+                files: {
+                    "public/css/app.css": '<%= path.less %>/app.less'
+                }
             }
         },
 
@@ -57,22 +65,28 @@ module.exports = function(grunt) {
                     '<%= path.bower %>/backbone/Backbone.js',
                     '<%= path.bower %>/bootstrap/dist/js/bootstrap.js'
                 ],
-                dest: 'public/js/vendor.js',
+                dest: 'public/js/vendor.js'
             },
             js: {
                 src: [
                     '<%= path.js %>/views/appView.js',
                     '<%= path.js %>/appBootstrap.js'
                 ],
-                dest: 'public/js/app.js',
+                dest: 'public/js/app.js'
             },
             css: {
                 src: [
                     '<%= path.bower %>/bootstrap/dist/css/bootstrap.css',
                     '<%= path.bower %>/bootstrap/dist/css/bootstrap-theme.css'
                 ],
-                dest: 'public/css/vendor.css',
-            }
+                dest: 'public/css/vendor.css'
+            }/*,
+            less: {
+                src: [
+                    '<%= path.less %>/app.less'
+                ],
+                dest: 'public/css/app.css'
+            }*/
         },
 
         copy: {
@@ -92,6 +106,10 @@ module.exports = function(grunt) {
                 files: ['<%= jshint.gruntfile %>'],
                 tasks: ['jshint:gruntfile']
             },
+            css : {
+                files: "<%= path.less %>/app.less",
+                tasks: ["less"]
+            },
             js: {
                 files: ['<%= jshint.js %>'],
                 tasks: ['jshint:js', 'concat:js']
@@ -103,5 +121,5 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default', ['clean', 'copy', 'concat', 'watch']);
+    grunt.registerTask('default', ['clean', 'copy', 'concat', 'less', 'watch']);
 };
