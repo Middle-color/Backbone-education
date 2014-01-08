@@ -1,0 +1,19 @@
+{
+  "curly": true,
+  "eqnull": true,
+  "eqeqeq": true,
+  "undef": true,
+  "browser": true,
+  "globals": {
+      "app": true,
+      "console": true,
+      "_": true,
+      "$": true,
+      "jQuery": true,
+      "Backbone": true,
+      "module": true,
+      "require": true,
+      "define": true,
+      "ENV": true
+  }
+}

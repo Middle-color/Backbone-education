@@ -1,7 +1,6 @@
 module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
-
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -12,38 +11,19 @@ module.exports = function(grunt) {
             app: 'app',
             js: '<%= path.app %>/js',
             less: '<%= path.app %>/less',
-            html: '<%= path.app %>/*.html',
+            jade: '<%= path.app %>/*.jade',
             bower: 'bower_components'
         },
 
         jshint: {
             options: {
-                curly: true,
-                eqnull: true,
-                eqeqeq: true,
-                undef: true,
-                browser: true,
-                globals: {
-                    app: true,
-                    console: true,
-                    _: true,
-                    $: true,
-                    jQuery: true,
-                    Backbone: true,
-                    module: true,
-                    require: true,
-                    define: true,
-                    ENV: true
-                }
+                jshintrc: '.jshintrc'
             },
             gruntfile: ['Gruntfile.js'],
-            js: ['<%= path.js %>/**/*.js']
+            js: ['<%= path.app %>/**/*.js']
         },
 
         less: {
-            /*files: {
-                "public/css/app.css": '<%= path.less %>/app.less'
-            }*/
             development: {
                 options: {
                     paths: ['<%= path.less %>/app.less']
@@ -54,16 +34,63 @@ module.exports = function(grunt) {
             }
         },
 
+        jade: {
+            compile: {
+                options: {
+                    pretty: true,
+
+                    data: function(dest, src) {
+                        var appjs = require('./public/output/appjs.json'),
+                            appcss = require('./public/output/appcss.json');
+
+                        var config = {
+                            appjs : (appjs && appjs[0]) ? '.'+appjs[0].rev : '',
+                            appcss : (appcss && appcss[0]) ? '.'+appcss[0].rev : ''
+                        };
+
+
+                        // Return an object of data to pass to template
+                        return config;
+                    }
+                },
+                files: {
+                    "public/index.html": ["<%= path.app %>/index.jade"]
+                }
+            }
+        },
+
+        // running less, concat:js tasks withing assets_versioning task, adding versions
+        assets_versioning: {
+            // app.js versioning
+            js: {
+                options: {
+                    use: 'hash',
+                    hashLength: 8,
+                    multitask: 'concat',
+                    output : 'public/output/appjs.json',
+                }
+            },
+            // app.css versioning
+            development: {
+                options: {
+                    use: 'hash',
+                    hashLength: 8,
+                    multitask: 'less',
+                    output : 'public/output/appcss.json',
+                }
+            }
+        },
+
         concat: {
             options: {
-                separator: ';',
+                separator: ';\n\n',
             },
             vendor: {
                 src: [
-                    '<%= path.bower %>/jquery/jquery.js',
-                    '<%= path.bower %>/underscore/underscore.js',
-                    '<%= path.bower %>/backbone/Backbone.js',
-                    '<%= path.bower %>/bootstrap/dist/js/bootstrap.js'
+                    '<%= path.bower %>/jquery/jquery.min.js',
+                    '<%= path.bower %>/underscore/underscore-min.js',
+                    '<%= path.bower %>/backbone/Backbone-min.js',
+                    '<%= path.bower %>/bootstrap/dist/js/bootstrap.min.js'
                 ],
                 dest: 'public/js/vendor.js'
             },
@@ -80,23 +107,15 @@ module.exports = function(grunt) {
                     '<%= path.bower %>/bootstrap/dist/css/bootstrap-theme.css'
                 ],
                 dest: 'public/css/vendor.css'
-            }/*,
-            less: {
-                src: [
-                    '<%= path.less %>/app.less'
-                ],
-                dest: 'public/css/app.css'
-            }*/
-        },
-
-        copy: {
-            html: {
-                src: '<%= path.app %>/index.html',
-                dest: 'public/index.html'
             }
         },
 
-        clean: ['public'],
+        clean: {
+            "public" : ['public'],
+            "js" : ['public/js/app*.js'],
+            "css" : ['public/css/app*.css'],
+            "html" : ['public/index.html'],
+        },
 
         watch: {
             options: {
@@ -108,18 +127,20 @@ module.exports = function(grunt) {
             },
             css : {
                 files: "<%= path.less %>/app.less",
-                tasks: ["less"]
+                tasks: ['clean:css', 'assets_versioning:development']
             },
             js: {
                 files: ['<%= jshint.js %>'],
-                tasks: ['jshint:js', 'concat:js']
+                tasks: ['jshint:js', 'clean:js', 'assets_versioning:js']
             },
             html: {
-                files: ['public/index.html'],
-                tasks: []
+                files: ['<%= path.app %>/index.jade'],
+                tasks: ['clean:html', 'jade']
             }
         }
     });
 
-    grunt.registerTask('default', ['clean', 'copy', 'concat', 'less', 'watch']);
+    grunt.registerTask('compile', ['assets_versioning', 'concat:css', 'concat:vendor', 'jade']);
+
+    grunt.registerTask('default', ['clean:public', 'compile', 'watch']);
 };
