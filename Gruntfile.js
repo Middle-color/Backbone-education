@@ -1,8 +1,6 @@
 module.exports = function(grunt) {
     // load all plugins at once
     require('load-grunt-tasks')(grunt);
-    // without this line jshint doesn't work
-    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     // Project configuration.
     grunt.initConfig({
