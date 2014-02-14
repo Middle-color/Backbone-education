@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                 dest: 'public/javascripts/vendor/require.js'
             },
             jquery: {
-                src: 'vendor/jquery/jquery.js',
+                src: 'vendor/jquery/dist/jquery.js',
                 dest: 'public/javascripts/vendor/jquery.js'
             },
             backbone: {
