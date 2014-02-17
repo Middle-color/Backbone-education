@@ -5778,3 +5778,6 @@ button.close {
 .page-login .form-signin-heading {
   text-align: center;
 }
+.page-start .holder .login {
+  margin-right: 10px;
+}

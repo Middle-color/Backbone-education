@@ -13,8 +13,8 @@ module.exports = function(grunt) {
                 tasks: ['jshint']
             },
             jade: {
-                options: { livereload: true },
-                files: ['public/templates/{,*/}*.jade'],
+                options: { livereload: true, pretty: true },
+                files: ['public/templates/{,*/}*.jade']
             },
             less: {
                 options: { livereload: true },
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                 dest: 'public/javascripts/vendor/require.js'
             },
             jquery: {
-                src: 'vendor/jquery/dist/jquery.js',
+                src: 'vendor/jquery/jquery.js',
                 dest: 'public/javascripts/vendor/jquery.js'
             },
             backbone: {

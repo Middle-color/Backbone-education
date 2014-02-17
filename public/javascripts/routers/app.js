@@ -1,22 +1,24 @@
 define([
     'backbone',
+    'views/starter',
     'views/login',
     'views/registration',
-    'models/user',
-    'jquery'
+    'models/user'
 ],
-function(Backbone, LoginView, RegistrationView, UserModel, $){
+function(Backbone, StarterView, LoginView, RegistrationView, UserModel){
     var AppRouter = Backbone.Router.extend({
         currentView: null,
 
         routes: {
-            '': 'home',
+            '': 'starter',
             'login': 'login',
             'registration': 'registration'
         },
 
-        home: function () {
-            $('#app').text('Welcome home');
+        starter: function () {
+            new StarterView({
+                model: new UserModel()
+            });
         },
 
         login: function () {
