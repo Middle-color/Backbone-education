@@ -3,26 +3,33 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
-var http = require('http');
-var path = require('path');
-var filter = require('./filter').filter;
+var express  = require('express');
+var http     = require('http');
+var path     = require('path');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash    = require('connect-flash');
+var configDB = require('./config/database.js');
+
 
 var app = express();
+mongoose.connect(configDB.url);
+require('./config/passport')(passport);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
-// app.use(express.logger('dev'));
+app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
-app.use(express.session());
+app.use(express.cookieParser('ilovescotchscotchyscotchscotch'));
+app.use(express.session('ilovescotchscotchyscotchscotch'));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -32,13 +39,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-
-
-// filter non-backbone requests
-app.get('/*', filter);
-
-app.get('/', routes.index);
-app.get('/users', user.list);
+require('./routes/all')(app, passport);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
