@@ -16,7 +16,7 @@ define([
 
         events: {
             'click .login': 'goLogin',
-            'click .register': 'goRegister'
+            'click .register': 'goRegisteration'
         },
 
         template: HomeTpl,
@@ -31,7 +31,7 @@ define([
             app.router.navigate('login', true);
         },
 
-        goRegister: function (event) {
+        goRegisteration: function (event) {
             event.preventDefault();
             app.router.navigate('registration', true);
         }
