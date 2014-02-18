@@ -4,12 +4,12 @@
 define([
     'backbone',
     'jquery',
+    'app',
     'jade!../../templates/home'
-], function(Backbone, $, HomeTpl){
+], function(Backbone, $, app, HomeTpl){
     var AppView = Backbone.View.extend({
 
         initialize: function () {
-            this.router = require('routers/app'),
             this.render();
             // deffered set elements for workable event-bindings
             this.setElement('#page-start');
@@ -29,12 +29,12 @@ define([
 
         goLogin: function (event) {
             event.preventDefault();
-            this.router.navigate('login', true);
+            app.router.navigate('login', true);
         },
 
         goRegister: function (event) {
             event.preventDefault();
-            this.router.navigate('registration', true);
+            app.router.navigate('registration', true);
         }
     });
 

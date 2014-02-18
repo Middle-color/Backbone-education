@@ -34,7 +34,5 @@ function(Backbone, HomeView, LoginView, RegistrationView, UserModel){
         }
     });
 
-    var app = new AppRouter();
-
-    return app;
+    return AppRouter;
 });
