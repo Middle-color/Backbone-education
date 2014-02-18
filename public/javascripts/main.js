@@ -29,6 +29,8 @@ require([
     'app',
     'routers/app'
 ], function (Backbone, app, AppRouter) {
+    'use strict';
+
     app.router = new AppRouter();
 
     Backbone.history.start({

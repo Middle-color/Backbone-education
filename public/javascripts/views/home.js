@@ -7,6 +7,8 @@ define([
     'app',
     'jade!../../templates/home'
 ], function(Backbone, $, app, HomeTpl){
+    'use strict';
+
     var AppView = Backbone.View.extend({
 
         initialize: function () {

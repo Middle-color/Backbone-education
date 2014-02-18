@@ -3,6 +3,8 @@ define([
     'jquery',
     'jade!../../templates/registration'
 ], function(Backbone, $, LoginTpl){
+    'use strict';
+
     var AppView = Backbone.View.extend({
         initialize: function () {
             this.render();

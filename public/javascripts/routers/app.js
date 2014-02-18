@@ -6,6 +6,8 @@ define([
     'models/user'
 ],
 function(Backbone, HomeView, LoginView, RegistrationView, UserModel){
+    'use strict';
+
     var AppRouter = Backbone.Router.extend({
         currentView: null,
 
