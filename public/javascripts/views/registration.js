@@ -46,7 +46,9 @@ define([
                     password: password
                 },
                 success: function (resp) {
-                    if (resp.error) return new Error(resp.error);
+                    if (resp.error) {
+                        return new Error(resp.error);
+                    }
 
                     if (resp.status && resp.status === 201 && resp.redirect) {
                         app.router.navigate(resp.redirect, true);
