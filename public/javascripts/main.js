@@ -27,10 +27,9 @@ require.config({
 require([
     'backbone',
     'routers/app'
-], function (Backbone, AppRouter) {
-    new AppRouter();
-
+], function (Backbone) {
     Backbone.history.start({
         pushState: true
     });
+    return app;
 });

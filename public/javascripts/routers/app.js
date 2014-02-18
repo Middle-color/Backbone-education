@@ -1,22 +1,22 @@
 define([
     'backbone',
-    'views/starter',
+    'views/home',
     'views/login',
     'views/registration',
     'models/user'
 ],
-function(Backbone, StarterView, LoginView, RegistrationView, UserModel){
+function(Backbone, HomeView, LoginView, RegistrationView, UserModel){
     var AppRouter = Backbone.Router.extend({
         currentView: null,
 
         routes: {
-            '': 'starter',
+            '': 'home',
             'login': 'login',
             'registration': 'registration'
         },
 
-        starter: function () {
-            new StarterView({
+        home: function () {
+            new HomeView({
                 model: new UserModel()
             });
         },
@@ -34,5 +34,7 @@ function(Backbone, StarterView, LoginView, RegistrationView, UserModel){
         }
     });
 
-    return AppRouter;
+    var app = new AppRouter();
+
+    return app;
 });
