@@ -10,7 +10,6 @@ var isLoggedIn = function (req, res, next) {
 
 module.exports = function(app, passport) {
     // filter non-backbone requests
-    // rewrite all non api and non-static requests
     app.get('/*', filter);
 
     app.get('/', routes.index);
@@ -18,36 +17,45 @@ module.exports = function(app, passport) {
     // API
     // ---
     app.post('/api/v1/registration',
-        passport.authenticate('local-registration'),
-        function (req, res) {
-            var user = req.body.email;
-
-            res.contentType('json');
-
-            res.send(JSON.stringify({
-                user: user,
-                auth: true
-            }));
+        function(req, res, next) {
+            passport.authenticate('local-registration', function(err, user, info) {
+                if (err) {
+                    return res.send({
+                        error: err
+                    });
+                }
+                if (!user) {
+                    return res.send({
+                        status: 401,
+                        message: info.message
+                    });
+                }
+                return res.send({
+                    status: 201,
+                    redirect: 'login',
+                    message: info.message
+                });
+            })(req, res, next);
         });
 
     app.post('/api/v1/login',
         function(req, res, next) {
-            passport.authenticate('local-registration', function(err, user, info) {
+            passport.authenticate('local-login', function(err, user, info) {
                 if (err) {
-                    return next(err);
+                    return res.send({
+                        error: err
+                    });
                 }
-
                 if (!user) {
                     return res.send({
-                        user: req.body.email,
-                        auth: false,
-                        message: 'Authentication Failed'
+                        status: 401,
+                        message: info.message
                     });
                 }
                 return res.send({
-                    user: req.body.email,
-                    auth: true,
-                    message : 'Authentication Succeeded'
+                    status: 200,
+                    redirect: '',
+                    message: info.message
                 });
             })(req, res, next);
         });
