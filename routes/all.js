@@ -21,7 +21,7 @@ module.exports = function(app, passport) {
     // }));
 
     app.post('/api/registration',
-        passport.authenticate('local-signup'),
+        passport.authenticate('local-registration'),
         function (req, res) {
             var user = req.body.email;
 
@@ -33,24 +33,25 @@ module.exports = function(app, passport) {
             }));
         });
 
-    app.post('/api/login', function(req, res, next) {
-        passport.authenticate('local-login', function(err, user, info) {
-            if (err) {
-                return next(err);
-            }
+    app.post('/api/login',
+        function(req, res, next) {
+            passport.authenticate('local-registration', function(err, user, info) {
+                if (err) {
+                    return next(err);
+                }
 
-            if (!user) {
+                if (!user) {
+                    return res.send({
+                        user: req.body.email,
+                        auth: false,
+                        message: 'Authentication Failed'
+                    });
+                }
                 return res.send({
                     user: req.body.email,
-                    auth: false,
-                    message: 'Authentication Failed'
+                    auth: true,
+                    message : 'Authentication Succeeded'
                 });
-            }
-            return res.send({
-                user: req.body.email,
-                auth: true,
-                message : 'Authentication Succeeded'
-            });
-        })(req, res, next);
-    });
+            })(req, res, next);
+        });
 };

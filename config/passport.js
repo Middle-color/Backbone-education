@@ -12,7 +12,7 @@ module.exports = function(passport) {
         });
     });
 
-    passport.use('local-signup', new LocalStrategy({
+    passport.use('local-registration', new LocalStrategy({
         usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true
@@ -47,7 +47,7 @@ module.exports = function(passport) {
 
     }));
 
-    passport.use('local-login', new LocalStrategy({
+    passport.use('local-registration', new LocalStrategy({
         usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true
