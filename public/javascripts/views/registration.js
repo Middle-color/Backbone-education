@@ -46,6 +46,8 @@ define([
                     password: password
                 },
                 success: function (resp) {
+                    console.log(resp);
+
                     if (resp.error) {
                         return new Error(resp.error);
                     }
@@ -54,7 +56,7 @@ define([
                         app.router.navigate(resp.redirect, true);
                     }
                 },
-                error: function (resp) {
+                error: function () {
                     throw new Error('501: Server internal error');
                 }
             });
