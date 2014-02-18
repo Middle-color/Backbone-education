@@ -10,17 +10,14 @@ var isLoggedIn = function (req, res, next) {
 
 module.exports = function(app, passport) {
     // filter non-backbone requests
+    // rewrite all non api and non-static requests
     app.get('/*', filter);
 
     app.get('/', routes.index);
 
-    // app.post('/api/login', passport.authenticate('local-login', {
-    //     successRedirect : '/',
-    //     failureRedirect : '/#/login',
-    //     failureFlash : true
-    // }));
-
-    app.post('/api/registration',
+    // API
+    // ---
+    app.post('/api/v1/registration',
         passport.authenticate('local-registration'),
         function (req, res) {
             var user = req.body.email;
@@ -33,7 +30,7 @@ module.exports = function(app, passport) {
             }));
         });
 
-    app.post('/api/login',
+    app.post('/api/v1/login',
         function(req, res, next) {
             passport.authenticate('local-registration', function(err, user, info) {
                 if (err) {
