@@ -40,6 +40,11 @@ app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// livereload
+/*app.use(require('connect-livereload')({
+    port: 35729
+}));*/
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());

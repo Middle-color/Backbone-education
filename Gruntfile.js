@@ -58,6 +58,10 @@ module.exports = function(grunt) {
                 src: 'vendor/require-jade/jade.js',
                 dest: 'public/javascripts/vendor/jade.js'
             }
+        },
+
+        reload: {
+            port: 35729
         }
     });
 
